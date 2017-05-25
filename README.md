@@ -1,2 +1,2 @@
 # DribbbleViewer
-https://github.com/RedMillLtd/DribbbbleViewer.git
+A Dribbble viewer to showcase Kotlin, RXAndroid and Dependency Injection
