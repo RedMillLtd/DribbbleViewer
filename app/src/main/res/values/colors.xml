@@ -4,5 +4,5 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="light_grey_text">#424242</color>
-    <color name="title_trans">#82ffffff</color>
+    <color name="title_trans">#63000000</color>
 </resources>
