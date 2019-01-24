@@ -28,6 +28,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
 import java.util.List;
+import java.util.Objects;
 
 import uk.co.redmill.viewabbble.DribbbleApp;
 import uk.co.redmill.viewabbble.R;
@@ -68,12 +69,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        lvShots = (RecyclerView) findViewById(R.id.shotList);
+        lvShots = findViewById(R.id.shotList);
         lvShots.setLayoutManager(new LinearLayoutManager(this));
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         mShotsRepository = Injection.provideTasksRepository(getApplicationContext());
-        populateList(0);
+        populateList(1);
     }
 
     private void populateList(int page) {
@@ -94,7 +95,6 @@ public class MainActivity extends AppCompatActivity {
 
     class ShotsAdapter extends RecyclerView.Adapter<ShotsAdapter.ViewHolder> {
         private List<Shots> mDataset;
-        private int lastPosition = -1;
 
         class ViewHolder extends RecyclerView.ViewHolder {
             RelativeLayout textLayout;
@@ -104,10 +104,10 @@ public class MainActivity extends AppCompatActivity {
 
             ViewHolder(View itemView) {
                 super(itemView);
-                textLayout = (RelativeLayout) itemView.findViewById(R.id.relTextLayout);
-                photo = (ImageView) itemView.findViewById(R.id.image);
-                title = (TextView) itemView.findViewById(R.id.title);
-                description = (TextView) itemView.findViewById(R.id.description);
+                textLayout = itemView.findViewById(R.id.relTextLayout);
+                photo = itemView.findViewById(R.id.image);
+                title = itemView.findViewById(R.id.title);
+                description = itemView.findViewById(R.id.description);
             }
         }
 
@@ -115,22 +115,22 @@ public class MainActivity extends AppCompatActivity {
             mDataset = myDataset;
         }
 
+        @NonNull
         @Override
-        public ShotsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
+        public ShotsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
                                                           int viewType) {
             View v = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.shot_item, parent, false);
-            ViewHolder vh = new ViewHolder(v);
-            return vh;
+            return new ViewHolder(v);
         }
 
         @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
             Shots shotItem = mDataset.get(position);
             final Context context = holder.photo.getContext();
             holder.title.setText(shotItem.getTitle());
             holder.description.setText(Html.fromHtml(shotItem.getDescription() == null ? "" : shotItem.getDescription()));
-            String url = shotItem.getImages().getNormal();
+            String url = Objects.requireNonNull(shotItem.getImages()).getNormal();
 
             Glide.with(context)
                     .asBitmap()
